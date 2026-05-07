@@ -1,7 +1,7 @@
 # Development Log – The Torchbearer
 
-**Student Name:** ___________________________
-**Student ID:** ___________________________
+**Student Name:** Christopher Anderson
+**Student ID:** 827320059
 
 > Instructions: Write at least four dated entries. Required entry types are marked below.
 > Two to five sentences per entry is sufficient. Write entries as you go, not all in one
@@ -10,21 +10,20 @@
 
 ---
 
-## Entry 1 – [Date]: Initial Plan
+## Entry 1 – [05/05/2026]: Initial Plan
 
 > Required. Write this before writing any code. Describe your plan: what you will
 > implement first, what parts you expect to be difficult, and how you plan to test.
 
-_Your entry here._
-
+_After reading this exam I will implement this exam in parts. I notice that parts 2,5 and 6 require serious work so I will most likely do part 2 in one day and 5-6 at another time. Part 2 requires Dijkstra's algorithim to find travel cost. Parts 5-6 backtrack searching is needed while pruning branches early when we can't beat the best solution found so far._  
 ---
 
-## Entry 2 – [Date]: [Short description]
+## Entry 2 – [05/06/2026]: [Short description]
 
 > Required. At least one entry must describe a bug, wrong assumption, or design change
 > you encountered. Describe what went wrong and how you resolved it.
 
-_Your entry here._
+_When working on the logic for visting a node in 2b I forgot to let it 'continue'. This caused for nodes to be reivewed a redundant amount of times and overwritting shortest distances. This error was fixed by adding the continue check at the start of the while loop._
 
 ---
 

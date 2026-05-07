@@ -34,7 +34,11 @@ def explain_problem():
 
     TODO
     """
-    return "TODO"
+    return (
+        "A single shortest-path run from S finds the cheapest way to reach each node on its own but can't find the order for  when to visit multiple chambers. This is becuase visiting them in a different order produces leads to different total costs.\n\n"
+        "After all inter-location costs are known we are left with finding out which order of relics minimizes total fuel.\n\n"
+        "This requires a serach over oders becuase the overal costs depeneds on the sequence of vists not the shortest immedidiate path."
+    )
 
 
 # =============================================================================
@@ -56,9 +60,19 @@ def select_sources(spawn, relics, exit_node):
 
     TODO
     """
-    pass
+    # The exit node is excluded since T is always the destination node
+    visited = set()
+    source = []
+
+    
+    for node in [spawn] + list(relics):
+        if node not in visited:
+            visited.add(node)
+            source.append(node)
 
 
+    return source
+    
 def run_dijkstra(graph, source):
     """
     Parameters
@@ -75,7 +89,39 @@ def run_dijkstra(graph, source):
 
     TODO
     """
-    pass
+
+    # All sources are set to infinty except the source node which is set to 0
+    distance = {}
+    
+
+    for node in graph:
+        distance[node] = float('inf')
+
+    distance[source] = 0
+
+    # Min heap reads cost then node
+    # Always process chepeast ode first
+    heap = [(0, source)]
+    visited = set()
+
+
+    while heap:
+        cost, node = heapq.heappop(heap)
+
+        if node in visited:
+            continue
+
+        visited.add(node)
+
+        for neighbor_node, weight in graph[node]:
+            total_cost = cost + weight
+
+
+            if total_cost < distance[neighbor_node]:
+                distance[neighbor_node] = total_cost
+                heapq.heappush(heap, (total_cost, neighbor_node))
+                
+    return distance
 
 
 def precompute_distances(graph, spawn, relics, exit_node):
@@ -95,7 +141,14 @@ def precompute_distances(graph, spawn, relics, exit_node):
 
     TODO
     """
-    pass
+
+    # Run once for each source node
+    dist_table = {}
+
+    for source in select_sources(spawn, relics, exit_node):
+        dist_table[source] = run_dijkstra(graph, source)
+
+    return dist_table
 
 
 # =============================================================================
@@ -212,7 +265,9 @@ def solve(graph, spawn, relics, exit_node):
 
     TODO
     """
-    pass
+    # Place holder for pass for testing purposes
+    return (float('inf'), [])
+    
 
 
 # =============================================================================
