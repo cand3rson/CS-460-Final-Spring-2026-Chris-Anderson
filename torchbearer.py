@@ -165,7 +165,11 @@ def dijkstra_invariant_check():
 
     TODO
     """
-    return "TODO"
+    return (
+        "For nodes already finalized the nodes distance is locked as the shortest path and won't be updated again. For nodes not yet finalized the current distance represents the best path found so far using only already finalized nodes as stops, but it could still improve.\n\n"
+        "Before iteration 1 S is empty with all nodes having a distance of infinity and the source nodes distance is 0 since it is itself. The invariant holds because no nodes have been finalized. When the min distance node is revelaed it's distance is always the shortest path. This is because all edge weights are non-negative and no other path can be smaller.The invariant gurantees that when the heap is empty every node has been finialized and their distance value is the shortest distance to the source.\n\n"
+        "This matters for the Route Planner because if Dijkstra's output is wrong the Route Planner would pick the wrong relic order and not find the minniumum fuel route.\n\n"
+    )
 
 
 # =============================================================================

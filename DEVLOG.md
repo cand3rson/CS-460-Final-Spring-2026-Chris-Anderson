@@ -18,7 +18,7 @@
 _After reading this exam I will implement this exam in parts. I notice that parts 2,5 and 6 require serious work so I will most likely do part 2 in one day and 5-6 at another time. Part 2 requires Dijkstra's algorithim to find travel cost. Parts 5-6 backtrack searching is needed while pruning branches early when we can't beat the best solution found so far._  
 ---
 
-## Entry 2 – [05/06/2026]: [Short description]
+## Entry 2 – [05/06/2026]: Visited Node Issue in Part 2b
 
 > Required. At least one entry must describe a bug, wrong assumption, or design change
 > you encountered. Describe what went wrong and how you resolved it.

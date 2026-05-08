@@ -104,17 +104,17 @@
 > State the failure mode. Then give a concrete counter-example using specific node names
 > or costs (you may use the illustration example from the spec). Three to five bullets.
 
-- **The failure mode:** *Your answer here.*
-- **Counter-example setup:** *Your answer here.*
-- **What greedy picks:** *Your answer here.*
-- **What optimal picks:** *Your answer here.*
-- **Why greedy loses:** *Your answer here.*
+- **The failure mode:** *The failure mode is that a greedy apporach will pick the cheapest current node even if it leads to to a more expensive overall route.*
+- **Counter-example setup:** *A weighted and directed graph G{S,A,B,T} where A and B are relic chamners and with S pointing to A for 1, S pointing to B for 4, A pointing to T for 1, A pointing to B for 8 and B pointing to T for 1 and B pointing to A for 1.*
+- **What greedy picks:** *A greedy algorithim selects S,A,B,T for a total cost of 10.*
+- **What optimal picks:** *The optimal solution selects S,B,A,T for a total cost of 6.*
+- **Why greedy loses:** *When the greedy path had to choose between S to A for 1 or S to B for 4, it picekd S to A. However, this forced the greedy algorithim to pick A to B for 8, a much slower apporach.*
 
 ### What the Algorithm Must Explore
 
 > One bullet. Must use the word "order."
 
-- *Your answer here.*
+- *The algorithm must explore every possible order of visiting relic chambers because the total cost depends on the order of the relics found not just the local shortest path costs between nodes.*
 
 ---
 
