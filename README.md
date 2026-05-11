@@ -4,17 +4,13 @@
 **Student ID:** 827320059
 **Course:** CS 460 – Algorithms | Spring 2026
 
-> This README is your project documentation. Write it the way a developer would document
-> their design decisions , bullet points, brief justifications, and concrete examples where
-> required. You are not writing an essay. You are explaining what you built and why you built
-> it that way. Delete all blockquotes like this one before submitting.
+
 
 ---
 
 ## Part 1: Problem Analysis
 
-> Document why this problem is not just a shortest-path problem. Three bullet points, one
-> per question. Each bullet should be 1-2 sentences max.
+
 
 - **Why a single shortest-path run from S is not enough:**
 *A single shortest-path run from S finds the cheapest way to reach each node on its own but can't find the order for  when to visit multiple chambers. This is becuase visiting them in a different order produces leads to different total costs.*
@@ -29,7 +25,7 @@
 
 ### Part 2a: Source Selection
 
-> List the source node types as a bullet list. For each, one-line reason.
+
 
 
 | Source Node Type | Why it is a source                                                                                                     |
@@ -40,7 +36,6 @@
 
 ### Part 2b: Distance Storage
 
-> Fill in the table. No prose required.
 
 
 | Property                    | Your answer                                                             |
@@ -54,7 +49,6 @@
 
 ### Part 2c: Precomputation Complexity
 
-> State the total complexity and show the arithmetic. Two to three lines max.
 
 - **Number of Dijkstra runs:** *k + 1*
 - **Cost per run:** *Cost = O(m * log(n))*
@@ -65,22 +59,19 @@
 
 ## Part 3: Algorithm Correctness
 
-> Document your understanding of why Dijkstra produces correct distances.
-> Bullet points and short sentences throughout. No paragraphs.
 
-### Part 3a: What the Invariant Means
 
-> Two bullets: one for finalized nodes, one for non-finalized nodes.
-> Do not copy the invariant text from the spec.
+### Part 3a: Invariant Explanation
+
+
 
 - **For nodes already finalized (in S):**
 *For nodes already finalized the nodes distance is locked as the shortest path and won't be updated again.*
 - **For nodes not yet finalized (not in S):**
 *For nodes not yet finalized the current distance represents the best path found so far using only already finalized nodes as stops, but it could still improve.*
 
-### Part 3b: Why Each Phase Holds
+### Part 3b: Invariant Maintenance
 
-> One to two bullets per phase. Maintenance must mention nonnegative edge weights.
 
 - **Initialization : why the invariant holds before iteration 1:**
 *Before iteration 1 S is empty with all nodes having a distance of infinity and the source nodes distance is 0 since it is itself. The invariant holds because no nodes have been finalized.*
@@ -89,9 +80,8 @@
 - **Termination : what the invariant guarantees when the algorithm ends:**
 *The invariant gurantees that when the heap is empty every node has been finialized and their distance value is the shortest distance to the source.*
 
-### Part 3c: Why This Matters for the Route Planner
+### Part 3c: Why Correctness Matters
 
-> One sentence connecting correct distances to correct routing decisions.
 
 *This matters for the Route Planner because if Dijkstra's output is wrong the Route Planner would pick the wrong relic order and not find the minniumum fuel route.*
 
@@ -101,8 +91,6 @@
 
 ### Why Greedy Fails
 
-> State the failure mode. Then give a concrete counter-example using specific node names
-> or costs (you may use the illustration example from the spec). Three to five bullets.
 
 - **The failure mode:** *The failure mode is that a greedy apporach will pick the cheapest current node even if it leads to to a more expensive overall route.*
 - **Counter-example setup:** *A weighted and directed graph G{S,A,B,T} where A and B are relic chamners and with S pointing to A for 1, S pointing to B for 4, A pointing to T for 1, A pointing to B for 8 and B pointing to T for 1 and B pointing to A for 1.*
@@ -112,7 +100,7 @@
 
 ### What the Algorithm Must Explore
 
-> One bullet. Must use the word "order."
+
 
 - *The algorithm must explore every possible order of visiting relic chambers because the total cost depends on the order of the relics found not just the local shortest path costs between nodes.*
 
@@ -122,37 +110,35 @@
 
 ### Part 5a: State Representation
 
-> Document the three components of your search state as a table.
-> Variable names here must match exactly what you use in torchbearer.py.
 
 
-| Component                | Variable name in code | Data type | Description |
-| ------------------------ | --------------------- | --------- | ----------- |
-| Current location         |                       |           |             |
-| Relics already collected |                       |           |             |
-| Fuel cost so far         |                       |           |             |
+
+| Component                | Variable name in code | Data type | Description                                                         |
+| ------------------------ | --------------------- | --------- | ------------------------------------------------------------------- |
+| Current location         | current_loc           | String    | This represents the current node the torchbear is in.               |
+| Relics already collected | relics_visited_order  | list      | This represents the list of relics aquired this far in the journey. |
+| Fuel cost so far         | cost_so_far           | float     | This represents the fuel used to get to this chamber.               |
 
 
 ### Part 5b: Data Structure for Visited Relics
 
-> Fill in the table.
 
 
-| Property                                    | Your answer      |
-| ------------------------------------------- | ---------------- |
-| Data structure chosen                       |                  |
-| Operation: check if relic already collected | Time complexity: |
-| Operation: mark a relic as collected        | Time complexity: |
-| Operation: unmark a relic (backtrack)       | Time complexity: |
-| Why this structure fits                     |                  |
+| Property                                    | Your answer                                                                                                                                                                                   |
+| ------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Data structure chosen                       | Set                                                                                                                                                                                           |
+| Operation: check if relic already collected | Time complexity: O(1) constant time.                                                                                                                                                          |
+| Operation: mark a relic as collected        | Time complexity: O(1) constant time.                                                                                                                                                          |
+| Operation: unmark a relic (backtrack)       | Time complexity: O(1) constant time.                                                                                                                                                          |
+| Why this structure fits                     | Since checking if a relic is already collected, marking a relic as collected and bakctracking are all cosntant time a set can handle this while a list would requires checking all k options. |
 
 
 ### Part 5c: Worst-Case Search Space
 
-> Two bullets.
 
-- **Worst-case number of orders considered:** *Your answer (in terms of k).*
-- **Why:** *One-line justification.*
+
+- **Worst-case number of orders considered:** *k facotorial.*
+- **Why:** *This is because the algorithim needs to know every possible combination of paths to be certain of the cheapest path.*
 
 ---
 
@@ -160,31 +146,29 @@
 
 ### Part 6a: Best-So-Far Tracking
 
-> Three bullets.
 
-- **What is tracked:** *Your answer here.*
-- **When it is used:** *Your answer here.*
-- **What it allows the algorithm to skip:** *Your answer here.*
+
+- **What is tracked:** *The least expensive fuel route from what has been tracked so far with the relics order.*
+- **When it is used:** *It is used during each call to the explore funciton.*
+- **What it allows the algorithm to skip:** *This allows the algorithim to skip a path of the graph with a equal to or higher total cost compared to the current best path.*
 
 ### Part 6b: Lower Bound Estimation
 
-> Three bullets.
 
-- **What information is available at the current state:** *Your answer here.*
-- **What the lower bound accounts for:** *Your answer here.*
-- **Why it never overestimates:** *Your answer here.*
+
+- **What information is available at the current state:** *At the current state the fuel cost, where the torchbearer is, how many relics are left to be found and the current shortest path is known.*
+- **What the lower bound accounts for:** *The lower bound accounts for how much fuel has already ben used plus the minnimum amount of fuel needed to reach the goal.*
+- **Why it never overestimates:** *It will never overstiamte because it uses the optimal shorter path distance in it's assumption.*
 
 ### Part 6c: Pruning Correctness
 
-> One to two bullets. Explain why pruning is safe.
 
-- *Your answer here.*
+- *Pruning is safe because if a new path is found to have a current cost equal to or higher than the current best path it is impossible to beat the current best path.*
 
 ---
 
 ## References
 
-> Bullet list. If none beyond lecture notes, write that.
 
-- *Your references here.*
+- *No references beyond lecture.*
 

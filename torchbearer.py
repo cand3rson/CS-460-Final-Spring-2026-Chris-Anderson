@@ -37,7 +37,7 @@ def explain_problem():
     return (
         "A single shortest-path run from S finds the cheapest way to reach each node on its own but can't find the order for  when to visit multiple chambers. This is becuase visiting them in a different order produces leads to different total costs.\n\n"
         "After all inter-location costs are known we are left with finding out which order of relics minimizes total fuel.\n\n"
-        "This requires a serach over oders becuase the overal costs depeneds on the sequence of vists not the shortest immedidiate path."
+        "This requires a serach over oders becuase the overal costs depeneds on the sequence of vists not the shortest immedidiate path.\n\n"
     )
 
 
@@ -186,7 +186,14 @@ def explain_search():
 
     TODO
     """
-    return "TODO"
+    return (
+        "The failure mode is that a greedy apporach will pick the cheapest current node even if it leads to to a more expensive overall route.\n\n"
+        "A weighted and directed graph G{S,A,B,T} with S pointing to A for 1, S pointing to B for 4, A pointing to T for 1, A pointing to B for 8 and B pointing to T for 1 and B pointing to A for 1.\n\n"
+        "A greedy algorithim selects S,A,B,T for a total cost of 10.\n\n"
+        "The optimal solution selects S,B,A,T for a total cost of 6.\n\n"
+        "When the greedy path had to choose between S to A for 1 or S to B for 4, it picekd S to A. However, this forced the greedy algorithim to pick A to B for 8, a much slower apporach.\n\n"
+        "The algorithm must explore every possible order of visiting relic chambers because the total cost depends on the order of the relics found not just the local shortest path costs between nodes.\n\n"
+    )
 
 
 # =============================================================================
@@ -213,7 +220,16 @@ def find_optimal_route(dist_table, spawn, relics, exit_node):
 
     TODO
     """
-    pass
+    # Part 5b
+    relics_remaining = set(relics)
+    # Part 5a
+    relics_visited_order = []
+    # Part 6a
+    best = [float('inf'), []]
+
+
+    _explore(dist_table, spawn, relics_remaining, relics_visited_order, 0, exit_node, best)
+    return (best[0], best[1])
 
 
 def _explore(dist_table, current_loc, relics_remaining, relics_visited_order,
@@ -245,7 +261,74 @@ def _explore(dist_table, current_loc, relics_remaining, relics_visited_order,
     explaining why it is safe (cannot skip the optimal solution).
     This comment is graded.
     """
-    pass
+    # Best-so-far pruning from part 6a
+    if cost_so_far >= best[0]:
+        return
+
+    # Lower bound pruning from part 6b
+    if relics_remaining:
+        cheapest_to_remaining_relic = min(
+
+            dist_table.get(current_loc, {}).get(relic, float('inf'))
+            for relic in relics_remaining )
+
+
+        # cheapest cost from any of the remaining relics to exit
+        cheapest_to_relic_t = min(
+
+            dist_table.get(relic, {}).get(exit_node, float('inf'))
+            for relic in relics_remaining)
+
+            
+        lower = cost_so_far + cheapest_to_remaining_relic + cheapest_to_relic_t
+
+        # Part 6c: The lower bound is found from the shortest path of the least expensive
+        # move to any  relic left over and the least expensive move from any relic to the exit.
+        # This means it will never go over the cost to finish and it will never
+        # beat the current best leading to the optimal solution never being pruned.
+        if lower >= best[0]:
+            return
+
+
+
+    # Part 5c search space exploration.
+    # BASE CASE:
+    # All relics collected.
+    if not relics_remaining:
+        # Cost for current location + exit
+        final_cost = dist_table.get(current_loc, {}).get(exit_node, float('inf'))
+        total_cost = cost_so_far + final_cost
+
+
+        # If a solution is better than best, update best
+        if total_cost < best[0]:
+            best[0] = total_cost
+            best[1] = list(relics_visited_order)
+        return
+
+
+    # Part 5c exploration.
+    # Using recurison to explore each remaining relic as next destination
+    for relic in list(relics_remaining):
+        travel_cost = dist_table.get(current_loc, {}).get(relic, float('inf'))
+
+        # Unreachable 
+        if travel_cost == float('inf'):
+            continue
+
+
+        # Part 5b visit relic
+        relics_remaining.remove(relic)
+        relics_visited_order.append(relic)
+
+        # Part 5c recursion logic
+        _explore(dist_table,relic, relics_remaining, relics_visited_order,cost_so_far + travel_cost,exit_node,best)
+
+
+        # Part 5b backgracking logic.
+        relics_visited_order.pop()
+        relics_remaining.add(relic)
+
 
 
 # =============================================================================
@@ -269,9 +352,12 @@ def solve(graph, spawn, relics, exit_node):
 
     TODO
     """
-    # Place holder for pass for testing purposes
-    return (float('inf'), [])
     
+    dist_table = precompute_distances(graph, spawn, relics, exit_node)
+
+    return find_optimal_route(dist_table, spawn, relics, exit_node)
+    
+
 
 
 # =============================================================================
